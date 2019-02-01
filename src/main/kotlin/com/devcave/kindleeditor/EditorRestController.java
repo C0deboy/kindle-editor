@@ -18,6 +18,7 @@ public class EditorRestController {
         return content;
     }
 
+
     @PostMapping("/content")
     public void sendContent(@RequestBody String text) throws Exception {
         content = text;

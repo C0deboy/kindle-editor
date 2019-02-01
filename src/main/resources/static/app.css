@@ -1,15 +1,24 @@
 
 html, body {
     margin: 0;
-    height: 100%;
+    height: 99%;
 }
 
 .editor {
-    height: 85%;
-    margin: 20px;
-    padding: 20px;
-    overflow-y: auto;
+    height: 97%;
     white-space: pre-wrap;
     border: none;
-    width: 991px;
+    display: block;
+    padding: 20px;
+    margin: 15px auto 0;
+    width: 1000px;
+    font-family: 'Ubuntu', sans-serif;
+    text-rendering: optimizeSpeed;
+}
+
+@media (min-width: 1200px) {
+    .editor {
+        font-size: 26px;
+        width: 641px;
+    }
 }

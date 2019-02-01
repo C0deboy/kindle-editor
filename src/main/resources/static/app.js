@@ -1,5 +1,5 @@
 var sock;
-var editorEl = document.querySelector(".editor");
+var editor = document.querySelector(".editor");
 var errors = document.querySelector('.errors');
 var watch = document.querySelector('.watch-btn');
 
@@ -8,16 +8,24 @@ var host = window.location.hostname;
 connect();
 
 function updateData() {
-    return function (data) {
-        var d = data.data.split('|');
-        editorEl.textContent = d[0];
+    return function (e) {
+        var data = JSON.parse(e.data);
 
-        editorEl.setSelectionRange(d[1], d[1]);
-
-        editorEl.focus();
-
-        autoScroll(d[1]);
+        autoScroll(data.cursor, data.text);
     };
+}
+
+function autoScroll(selectionStart, fullText) {
+
+    editor.focus();
+
+    editor.value = fullText.substring(0, selectionStart);
+    editor.scrollTop = editor.scrollHeight;
+    editor.value = fullText;
+    if (editor.scrollTop > 100)
+        editor.scrollTop += 600;
+
+    editor.setSelectionRange(selectionStart, selectionStart);
 }
 
 function connect() {
@@ -25,7 +33,7 @@ function connect() {
     sock = new SockJS('http://' + host + ':8080/editor-socket', null, {transports: "xhr-streaming"});
 
     sock.onerror = function (event) {
-        editorEl.value = event;
+        editor.value = event;
     };
 
     sock.onmessage = function (data) {
@@ -34,35 +42,17 @@ function connect() {
     };
 }
 
-
-watch.addEventListener('click', function (el) {
-
+if (host !== 'localhost') {
     sock.onmessage = updateData();
-
-    watch.parentElement.removeChild(watch);
-});
-
-if (host !== 'localhost')
-    watch.click();
-else
-    editorEl.style.fontSize = '35px';
-
-editorEl.addEventListener('keyup', function (el) {
-    var text = el.target.value;
-    sock.send(text + "|" + el.target.selectionStart);
-});
-
-function autoScroll(selectionStart) {
-
-    const fullText = editorEl.value;
-    editorEl.value = fullText.substring(0, selectionStart);
-    editorEl.scrollTop = editorEl.scrollHeight + 20;
-    editorEl.value = fullText;
-
-    editorEl.setSelectionRange(selectionStart, selectionStart);
 }
+
+editor.addEventListener('keyup', function (el) {
+    sock.send(JSON.stringify({
+        text: editor.value,
+        cursor: editor.selectionStart
+    }));
+});
 
 window.addEventListener("beforeunload", function() {
     sock.close();
-    errors.innerHTML = 'closing';
 });
