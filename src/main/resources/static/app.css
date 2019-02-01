@@ -1,0 +1,15 @@
+
+html, body {
+    margin: 0;
+    height: 100%;
+}
+
+.editor {
+    height: 85%;
+    margin: 20px;
+    padding: 20px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    border: none;
+    width: 991px;
+}

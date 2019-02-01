@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kindle editor</title>
+
+    <link rel="stylesheet" href="app.css"/>
+
+
+</head>
+<body>
+
+    <button class="watch-btn">Watch</button>
+    <div class="errors"></div>
+
+    <textarea class="editor"></textarea>
+
+    <script>
+        var errors = document.querySelector('.errors');
+        errors.innerHTML = 'no erros';
+        window.onerror = function (message, source, lineno, colno, error) {
+            errors.innerHTML = message;
+        };
+    </script>
+
+    <script src="sockjs.js"></script>
+    <script src="app2.js"></script>
+
+
+</body>
+</html>
