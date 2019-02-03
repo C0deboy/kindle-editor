@@ -13,7 +13,6 @@ function updateData() {
         autoScroll(data.cursor, data.text);
 
         var percantage = data.cursor.start * 100 / data.text.length;
-        console.log(percantage);
         progress.style.width = percantage + '%';
     };
 }
@@ -22,7 +21,7 @@ function autoScroll(cursor, fullText) {
 
     editor.focus();
 
-    editor.value = fullText.substring(0, cursor.start);
+    editor.value = fullText.substring(0, cursor.end);
     editor.scrollTop = editor.scrollHeight;
     editor.value = fullText;
     if (editor.scrollTop > 100)
