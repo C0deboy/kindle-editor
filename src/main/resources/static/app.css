@@ -1,11 +1,16 @@
 
 html, body {
     margin: 0;
-    height: 99%;
+    padding: 0;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }
 
 .editor {
-    height: 97%;
+    height: 1195px;
     white-space: pre-wrap;
     border: none;
     display: block;
@@ -21,4 +26,13 @@ html, body {
         font-size: 26px;
         width: 641px;
     }
+}
+
+.progress {
+    height: 10px;
+    width: 0;
+    background: gray;
+    margin: 0 15px;
+    padding: 0 20px;
+    max-width: 1000px;
 }

@@ -33,7 +33,10 @@ class SocketHandler : TextWebSocketHandler() {
             lastMessage = String(Files.readAllBytes(file.toPath()), Charset.defaultCharset())
             val json = jacksonObjectMapper().createObjectNode()
             json.put("text", lastMessage)
-            json.put("cursor", lastMessage.length)
+            val cursor = json.putObject("cursor")
+            cursor.put("start", lastMessage.length)
+            cursor.put("end", lastMessage.length)
+
             lastData = jacksonObjectMapper().writeValueAsString(json)
 
             println("Using file: " + file.absolutePath)
