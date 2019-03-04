@@ -48,11 +48,20 @@ if (host !== 'localhost') {
     sock.onmessage = updateData();
 }
 
-editor.addEventListener('keyup', function (el) {
+editor.addEventListener('keyup', function (e) {
     sock.send(JSON.stringify({
         text: editor.value,
         cursor: {start: editor.selectionStart, end: editor.selectionEnd}
     }));
+});
+
+editor.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.keyCode === 83) {// ctrl + s
+        e.preventDefault()
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', 'http://' + host + ':8080/backup', true);
+        xhr.send(editor.value)
+    }
 });
 
 window.addEventListener("beforeunload", function() {

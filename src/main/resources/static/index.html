@@ -5,7 +5,6 @@
     <title>Kindle editor</title>
 
     <link rel="stylesheet" href="app.css"/>
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
 
 </head>
 <body>
@@ -18,7 +17,7 @@
     <script>
         var errors = document.querySelector('.errors');
         window.onerror = function (message, source, lineno, colno, error) {
-            errors.innerHTML = message;
+            errors.innerHTML = JSON.stringify(message);
         };
     </script>
 
