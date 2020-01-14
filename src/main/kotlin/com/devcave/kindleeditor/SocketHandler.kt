@@ -32,7 +32,6 @@ class SocketHandler : TextWebSocketHandler() {
                 if (text.isNotBlank())
                     Backup.saveToCurrentFile(text)
             }
-
         }
 
         charsCount++;
@@ -52,10 +51,8 @@ class SocketHandler : TextWebSocketHandler() {
     }
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
-
         println("${session.localAddress.toString()} connected.")
         sessions.add(session)
-
         session.sendMessage(TextMessage(lastData))
     }
 }

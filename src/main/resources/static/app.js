@@ -7,14 +7,12 @@ var host = window.location.hostname;
 
 connect();
 
-function updateData() {
-    return function (e) {
-        var data = JSON.parse(e.data);
-        autoScroll(data.cursor, data.text);
+function updateData(e) {
+    var data = JSON.parse(e.data);
+    autoScroll(data.cursor, data.text);
 
-        var percantage = data.cursor.start * 100 / data.text.length;
-        progress.style.width = percantage + '%';
-    };
+    var percentage = data.cursor.start * 100 / data.text.length;
+    progress.style.width = percentage + '%';
 }
 
 function autoScroll(cursor, fullText) {
@@ -39,30 +37,30 @@ function connect() {
     };
 
     sock.onmessage = function (data) {
-        updateData()(data);
+        updateData(data);
         sock.onmessage = null;
     };
 }
 
 if (host !== 'localhost') {
-    sock.onmessage = updateData();
+    sock.onmessage = updateData;
+} else {
+    editor.addEventListener('keyup', function (e) {
+        sock.send(JSON.stringify({
+            text: editor.value,
+            cursor: {start: editor.selectionStart, end: editor.selectionEnd}
+        }));
+    });
+
+    editor.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && e.keyCode === 83) {// ctrl + s
+            e.preventDefault()
+            var xhr = new XMLHttpRequest()
+            xhr.open('POST', 'http://' + host + ':8080/backup', true);
+            xhr.send(editor.value)
+        }
+    });
 }
-
-editor.addEventListener('keyup', function (e) {
-    sock.send(JSON.stringify({
-        text: editor.value,
-        cursor: {start: editor.selectionStart, end: editor.selectionEnd}
-    }));
-});
-
-editor.addEventListener('keydown', function (e) {
-    if (e.ctrlKey && e.keyCode === 83) {// ctrl + s
-        e.preventDefault()
-        var xhr = new XMLHttpRequest()
-        xhr.open('POST', 'http://' + host + ':8080/backup', true);
-        xhr.send(editor.value)
-    }
-});
 
 window.addEventListener("beforeunload", function() {
     sock.close();
