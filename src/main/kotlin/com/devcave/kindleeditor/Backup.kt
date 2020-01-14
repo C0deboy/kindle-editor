@@ -49,7 +49,8 @@ object Backup {
     fun makeBackup(text: String) {
         val dateFormatter = DateTimeFormatter.ISO_DATE
         val localDate = LocalDate.now()
-        val backupFile = File("post_${localDate.format(dateFormatter)}.md")
+        val backupFile = File("posts/post_${localDate.format(dateFormatter)}.md")
+        backupFile.mkdirs();
         println("Making backup to file: ${backupFile.absolutePath}")
         Files.write(backupFile.toPath(), text.toByteArray(Charset.defaultCharset()))
     }
